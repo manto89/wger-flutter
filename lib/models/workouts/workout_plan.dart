@@ -86,8 +86,8 @@ class WorkoutPlan {
 
   /// Massages the log data to more easily present on the log overview
   ///
-  Map<DateTime, Map<String, dynamic>> get logData {
-    final out = <DateTime, Map<String, dynamic>>{};
+  Map<DateTime, Map<String, Map<ExerciseBase, List<Log>>?>> get logData {
+    final out = <DateTime, Map<String, Map<ExerciseBase, List<Log>>?>>{};
     for (final log in logs) {
       final exercise = log.exerciseBaseObj;
       final date = log.date;
@@ -95,7 +95,8 @@ class WorkoutPlan {
       if (!out.containsKey(date)) {
         out[date] = {
           'session': null,
-          'exercises': <Exercise, List<Log>>{},
+          'exercises': <ExerciseBase, List<Log>>{}
+
         };
       }
 
@@ -103,7 +104,7 @@ class WorkoutPlan {
         out[date]!['exercises']![exercise] = <Log>[];
       }
 
-      out[date]!['exercises']![exercise].add(log);
+      out[date]!['exercises']![exercise]!.add(log);
     }
 
     return out;

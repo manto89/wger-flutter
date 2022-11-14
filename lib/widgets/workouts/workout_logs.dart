@@ -134,11 +134,24 @@ class _WorkoutLogCalendarState extends State<WorkoutLogCalendar> {
   void loadEvents() {
     for (final date in widget._workoutPlan.logData.keys) {
       final entry = widget._workoutPlan.logData[date]!;
+
+      Map<Exercise, List<Log>> exercises = {};
+      for (final exerciseBase in entry['exercises']!.keys){
+        final exerciseLogs = entry['exercises']![exerciseBase];
+        if (exerciseLogs == null){
+          exercises[exerciseBase.getExercise("en-EN")] = <Log>[];
+        }else{
+          exercises[exerciseBase.getExercise("en-EN")] = entry['exercises']![exerciseBase]!;
+        }
+        // exercises[exerciseBase.getExercise(Localizations.localeOf(context).languageCode)] = entry['exercises']![exerciseBase]!;
+        // exercises[exerciseBase.getExercise("en-EN")] = entry['exercises']![exerciseBase]!;
+      }
+
       _events[DateFormatLists.format(date)] = [
         WorkoutLogEvent(
           date,
-          entry['session'],
-          entry['exercises'],
+          null,
+          exercises,
         )
       ];
     }
